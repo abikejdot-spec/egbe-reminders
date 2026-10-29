@@ -13,9 +13,8 @@ except ImportError:
 
 app = Flask(__name__)
 
+
 # Initialize SQLite Database immediately on startup so tables are guaranteed to exist on Render
-
-
 def init_db():
   conn = sqlite3.connect("database.db", check_same_thread=False)
   cursor = conn.cursor()
@@ -147,12 +146,13 @@ def background_alarm_checker():
       time.sleep(10)
 
 
-# Single-file HTML layout with Search, Sort, and Clean Form
+# Single-file HTML layout with Responsive Mobile Full-Screen Layout
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Egbe Omo Eko Reminder System</title>
     <style>
         body {
@@ -169,11 +169,28 @@ HTML_TEMPLATE = """
             padding: 30px;
             border-radius: 10px;
             border: 2px solid #d4af37;
+            box-sizing: border-box;
         }
+        
+        /* Mobile Full-Screen Adaptation */
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+            }
+            .container {
+                width: 100%;
+                min-height: 100vh;
+                border: none;
+                border-radius: 0;
+                padding: 15px;
+            }
+        }
+
         h1 {
             color: #d4af37;
             text-align: center;
             margin-bottom: 25px;
+            font-size: 24px;
         }
         .form-group {
             margin-bottom: 20px;
@@ -192,6 +209,7 @@ HTML_TEMPLATE = """
             border-radius: 5px;
             color: #fff;
             box-sizing: border-box;
+            font-size: 16px; /* Prevents auto-zoom on mobile inputs */
         }
         textarea {
             resize: vertical;
