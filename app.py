@@ -13,7 +13,7 @@ except ImportError:
 
 app = Flask(__name__)
 
-# Initialize SQLite Database with a fresh table name (reminders_v3) to avoid any cache conflicts
+# Initialize SQLite Database immediately on startup so tables are guaranteed to exist on Render
 
 
 def init_db():
@@ -31,6 +31,10 @@ def init_db():
     """)
   conn.commit()
   conn.close()
+
+
+# Automatically run database initialization on module load (vital for Gunicorn / Render)
+init_db()
 
 
 # Function to display alarm with pinned stop button and scrollable message box
@@ -434,8 +438,6 @@ def edit_reminder(id):
 
 
 if __name__ == "__main__":
-  init_db()
-
   alarm_thread = threading.Thread(target=background_alarm_checker, daemon=True)
   alarm_thread.start()
 
